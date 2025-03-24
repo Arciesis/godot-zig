@@ -145,8 +145,8 @@ pub fn getVariantType(comptime T: type) Type {
         const ret1 = switch (@typeInfo(RT)) {
             .@"struct" => Godot.GDEXTENSION_VARIANT_TYPE_OBJECT,
             .bool => Godot.GDEXTENSION_VARIANT_TYPE_BOOL,
-            .int, .ComptimeInt => Godot.GDEXTENSION_VARIANT_TYPE_INT,
-            .float, .ComptimeFloat => Godot.GDEXTENSION_VARIANT_TYPE_FLOAT,
+            .int, .comptimeInt => Godot.GDEXTENSION_VARIANT_TYPE_INT,
+            .float, .comptimeFloat => Godot.GDEXTENSION_VARIANT_TYPE_FLOAT,
             .void => Godot.GDEXTENSION_VARIANT_TYPE_NIL,
             else => @compileError("Cannot construct variant from " ++ @typeName(T)),
         };
