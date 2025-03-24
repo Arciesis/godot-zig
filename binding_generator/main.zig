@@ -370,10 +370,10 @@ fn generateProc(code_builder: anytype, fn_node: anytype, allocator: mem.Allocato
         var buf: [256]u8 = undefined;
         const atypes = getArgumentsTypes(fn_node, &buf);
         if (atypes.len > 0) {
-            const temp_atypes_func_name = try temp_buf.bufPrint("{s}_from_{s}", .{func_name, atypes});
+            const temp_atypes_func_name = try temp_buf.bufPrint("{s}_from_{s}", .{ func_name, atypes });
             const atypes_func_name = getZigFuncName(allocator, temp_atypes_func_name);
 
-            try code_builder.print(0, "pub fn {s}(", .{ atypes_func_name });
+            try code_builder.print(0, "pub fn {s}(", .{atypes_func_name});
         } else {
             try code_builder.print(0, "pub fn {s}(", .{zig_func_name});
         }
@@ -716,7 +716,7 @@ fn generateMethod(class_node: anytype, code_builder: anytype, allocator: mem.All
             const temp_virtual_inherits_func_name = try std.fmt.allocPrint(allocator, "get_virtual_{s}", .{class_node.inherits});
             const virtual_inherits_func_name = getZigFuncName(allocator, temp_virtual_inherits_func_name);
 
-            try code_builder.printLine(1, "return Godot.{s}.{s}(T, p_userdata, p_name);", .{class_node.inherits, virtual_inherits_func_name});
+            try code_builder.printLine(1, "return Godot.{s}.{s}(T, p_userdata, p_name);", .{ class_node.inherits, virtual_inherits_func_name });
         } else {
             try code_builder.writeLine(1, "_ = T;");
             try code_builder.writeLine(1, "_ = p_userdata;");
@@ -1095,7 +1095,7 @@ pub fn main() !void {
 
     const contents = try cwd.readFileAlloc(allocator, fname, 10 * 1024 * 1024); //"./src/api/extension_api.json", 10 * 1024 * 1024);
 
-    const api = try std.json.parseFromSlice(GdExtensionApi, allocator, contents, .{ .ignore_unknown_fields = false });
+    const api = try std.json.parseFromSlice(GdExtensionApi, allocator, contents, .{ .ignore_unknown_fields = true });
 
     try cwd.deleteTree(outpath);
     try cwd.makePath(outpath);
