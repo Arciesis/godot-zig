@@ -129,7 +129,7 @@ fn getChildTypeOrSelf(comptime T: type) type {
     const typeInfo = @typeInfo(T);
     return switch (typeInfo) {
         .pointer => |info| info.child,
-        .Optional => |info| info.child,
+        .optional => |info| info.child,
         else => T,
     };
 }

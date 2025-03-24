@@ -104,7 +104,7 @@ pub fn getGodotObjectPtr(inst: anytype) *const ?*anyopaque {
 }
 
 pub fn cast(comptime T: type, inst: anytype) ?T {
-    if (@typeInfo(@TypeOf(inst)) == .Optional) {
+    if (@typeInfo(@TypeOf(inst)) == .optional) {
         if (inst) |i| {
             return .{ .godot_object = i.godot_object };
         } else {
@@ -394,8 +394,8 @@ pub fn registerClass(comptime T: type) void {
 
 pub fn MethodBinderT(comptime MethodType: type) type {
     return struct {
-        const ReturnType = @typeInfo(MethodType).Fn.return_type;
-        const ArgCount = @typeInfo(MethodType).Fn.params.len;
+        const ReturnType = @typeInfo(MethodType).@"fn".return_type;
+        const ArgCount = @typeInfo(MethodType).@"fn".params.len;
         const ArgsTuple = std.meta.fields(std.meta.ArgsTuple(MethodType));
         var arg_properties: [ArgCount + 1]Core.C.GDExtensionPropertyInfo = undefined;
         var arg_metadata: [ArgCount + 1]Core.C.GDExtensionClassMethodArgumentMetadata = undefined;
@@ -443,7 +443,7 @@ pub fn MethodBinderT(comptime MethodType: type) type {
                 //         return @ptrCast(@alignCast(Core.objectGetInstanceBinding(p_arg, Core.p_library, @ptrCast(&callbacks))));
                 //     }
                 // },
-                .Struct => {
+                .@"struct" => {
                     if (@hasDecl(T, "reference") and @hasDecl(T, "unreference")) { //RefCounted
                         const obj = Core.refGetObject(p_arg);
                         return .{ .godot_object = obj };
