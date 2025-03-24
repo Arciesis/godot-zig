@@ -135,7 +135,7 @@ fn getChildTypeOrSelf(comptime T: type) type {
 }
 pub fn getVariantType(comptime T: type) Type {
     const typeInfo = @typeInfo(T);
-    if (typeInfo == .pointer and @typeInfo(typeInfo.pointer.child) != .Struct) {
+    if (typeInfo == .pointer and @typeInfo(typeInfo.pointer.child) != .@"struct") {
         @compileError("Init Variant from " ++ @typeName(T) ++ " is not supported");
     }
     const RT = getChildTypeOrSelf(T);
@@ -143,7 +143,7 @@ pub fn getVariantType(comptime T: type) Type {
     const ret = comptime getByGodotType(RT);
     if (ret == Godot.GDEXTENSION_VARIANT_TYPE_NIL) {
         const ret1 = switch (@typeInfo(RT)) {
-            .Struct => Godot.GDEXTENSION_VARIANT_TYPE_OBJECT,
+            .@"struct" => Godot.GDEXTENSION_VARIANT_TYPE_OBJECT,
             .Bool => Godot.GDEXTENSION_VARIANT_TYPE_BOOL,
             .Int, .ComptimeInt => Godot.GDEXTENSION_VARIANT_TYPE_INT,
             .Float, .ComptimeFloat => Godot.GDEXTENSION_VARIANT_TYPE_FLOAT,
