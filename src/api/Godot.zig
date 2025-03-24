@@ -92,10 +92,10 @@ pub fn free(ptr: ?*anyopaque) void {
 
 pub fn getGodotObjectPtr(inst: anytype) *const ?*anyopaque {
     const typeInfo = @typeInfo(@TypeOf(inst));
-    if (typeInfo != .Pointer) {
+    if (typeInfo != .pointer) {
         @compileError("pointer required");
     }
-    const T = typeInfo.Pointer.child;
+    const T = typeInfo.pointer.child;
     if (@hasField(T, "godot_object")) {
         return &inst.godot_object;
     } else if (@hasField(T, "base")) {
@@ -432,7 +432,7 @@ pub fn MethodBinderT(comptime MethodType: type) type {
 
         fn ptrToArg(comptime T: type, p_arg: Core.C.GDExtensionConstTypePtr) T {
             switch (@typeInfo(T)) {
-                // .Pointer => |pointer| {
+                // .pointer => |pointer| {
                 //     const ObjectType = pointer.child;
                 //     const ObjectTypeName = comptime getBaseName(@typeName(ObjectType));
                 //     const callbacks = @field(ObjectType, "callbacks_" ++ ObjectTypeName);
@@ -571,7 +571,7 @@ pub fn registerSignal(comptime T: type, comptime signal_name: [:0]const u8, argu
 }
 
 pub fn connect(godot_object: anytype, signal_name: [:0]const u8, instance: anytype, comptime method_name: [:0]const u8) void {
-    if (@typeInfo(@TypeOf(instance)) != .Pointer) {
+    if (@typeInfo(@TypeOf(instance)) != .pointer) {
         @compileError("pointer type expected for parameter 'instance'");
     }
     registerMethod(std.meta.Child(@TypeOf(instance)), method_name);
